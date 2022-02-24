@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
   res.render(path.join(__dirname ,'/dist'))
 })
-app.listen(80, function(err, res) {
+app.listen(3000, function(err, res) {
   if(!err)
    console.log(`App started listening on the port 80`)
 });
