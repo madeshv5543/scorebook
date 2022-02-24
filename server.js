@@ -5,23 +5,19 @@ const express = require('express');
 const path = require('path');
 const compression = require('compression');
 
-const port = 8080;
+const port = 80;
 const app = express();
-function requireHTTPS(req, res, next) {
-    // The 'x-forwarded-proto' check is for Heroku
-    if (!req.secure && req.get('x-forwarded-proto') !== 'https') {
-        return res.redirect('https://' + req.get('host') + req.url);
-    }
-    next();
-}
 
 app.use(compression());
-app.use(requireHTTPS);
-app.use(express.static('./dist/'));
+app.use(express.static('dist'));
 
-app.get('/*', (req, res) =>
-    res.sendFile('index.html', {root: 'dist/'}),
-);
+app.get('*/manifest.json', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/manifest.json'));
+});
+
+app.get('/robots.txt', (req, res) => {
+    res.send('');
+});
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
