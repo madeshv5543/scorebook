@@ -1,20 +1,32 @@
+/* eslint-disable no-console */
+/* eslint-disable import/no-extraneous-dependencies */
+
 const express = require('express');
-const bodyParser = require('body-parser')
-const app  = express();
-const path = require('path')
-const history = require('connect-history-api-fallback')
+const path = require('path');
+const compression = require('compression');
 
-const staticFileMiddleware = express.static(path.join(__dirname, '/dist'))
-app.use(staticFileMiddleware)
-app.use(history())
-app.use(staticFileMiddleware)
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+const port = 3000;
+const app = express();
 
-app.get('/', function (req, res) {
-  res.render(path.join(__dirname ,'/dist'))
-})
-app.listen(80, function(err, res) {
-  if(!err)
-   console.log(`App started listening on the port 80`)
+app.use(compression());
+app.use(express.static('dist'));
+
+app.get('*/manifest.json', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/manifest.json'));
+});
+
+app.get('/robots.txt', (req, res) => {
+    res.send('');
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+app.listen(port, err => {
+    if (err) {
+        console.log(err);
+    } else {
+       console.log("server runing")
+    }
 });
