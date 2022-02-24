@@ -5,14 +5,14 @@ const express = require('express');
 const path = require('path');
 const compression = require('compression');
 
-const port = 3000;
+const port = 80;
 const app = express();
 
 app.use(compression());
 app.use(express.static('dist'));
 
 app.get('*/manifest.json', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/manifest.json'));
+    res.sendFile(path.join(__dirname, 'dist/manifest.json'));
 });
 
 app.get('/robots.txt', (req, res) => {
@@ -20,7 +20,7 @@ app.get('/robots.txt', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 app.listen(port, err => {
